@@ -32,8 +32,10 @@ class Citadel():
         if name:
             params['name'] = name
         if tag_query:
+            assert(isinstance(tag_query,str))
             params['query'] = tag_query
         if geo_query:
+            assert(isinstance(geo_query,str))
             params['geo_query'] = geo_query
 
         resp = requests.get(self.api_url() + '/point', params=params)
@@ -76,7 +78,7 @@ class Citadel():
                         }
                     }
 
-    def get_timeseries(uuid, start_time=None, end_time=None):
+    def get_timeseries(self, uuid, start_time=None, end_time=None):
         params = dict()
         if start_time:
             params['start_time'] = str(int(start_time))
@@ -98,7 +100,7 @@ class Citadel():
                         }
                     }
 
-    def delete_timeseries(uuid, start_time, end_time):
+    def delete_timeseries(self, uuid, start_time, end_time):
         ts_url = '{0}/{1}/timeseries'.format(self.api_url(), uuid)
         params = {
                 'start_time': start_time,
