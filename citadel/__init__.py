@@ -32,10 +32,12 @@ class Citadel():
         if name:
             params['name'] = name
         if tag_query:
-            assert(isinstance(tag_query,str))
+            if not isinstance(tag_query,str):
+                tag_query = json.dumps(tag_query)
             params['query'] = tag_query
         if geo_query:
-            assert(isinstance(geo_query,str))
+            if not isinstance(geo_query,str):
+                geo_query = json.dumps(geo_query)
             params['geo_query'] = geo_query
 
         resp = requests.get(self.api_url() + '/point', params=params)
@@ -55,9 +57,9 @@ class Citadel():
 
     def delete_point(self, uuid):
         # delete the uuid
-        resp = requests.delete('{0}/{1}'.format(self.api_url(), uuid))
+        resp = requests.delete('{0}/point/{1}'.format(self.api_url(), uuid))
         if resp.status_code==200:
-            return {'succes': True}
+            return {'success': True}
         else:
             return {'success': False,
                     'result':{
@@ -66,8 +68,8 @@ class Citadel():
                     }
 
     def put_timeseries(self, uuid, ts_data):
-        data = {'samples': test_ts_data}
-        ts_url = '{0}/{1}/timeseries'.format(self.api_url(), uuid)
+        data = {'samples': ts_data}
+        ts_url = '{0}/point/{1}/timeseries'.format(self.api_url(), uuid)
         resp = requests.post(ts_url, json=data)
         if resp.status_code==200:
             return {'success':True}
@@ -85,7 +87,7 @@ class Citadel():
         if end_time:
             params['end_time'] = str(int(end_time))
 
-        ts_url = '{0}/{1}/timeseries'.format(self.api_url(), uuid)
+        ts_url = '{0}/point/{1}/timeseries'.format(self.api_url(), uuid)
         resp = requests.get(ts_url, params=params)
         if resp.status_code==200:
             return {'success': True,
@@ -101,7 +103,7 @@ class Citadel():
                     }
 
     def delete_timeseries(self, uuid, start_time, end_time):
-        ts_url = '{0}/{1}/timeseries'.format(self.api_url(), uuid)
+        ts_url = '{0}/point/{1}/timeseries'.format(self.api_url(), uuid)
         params = {
                 'start_time': start_time,
                 'end_time': end_time
