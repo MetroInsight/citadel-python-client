@@ -12,7 +12,7 @@ class Citadel():
     def api_url(self):
         return '{0}/api'.format(self.base_url)
 
-    def add_point(self, metadata):
+    def create_point(self, metadata):
         resp = requests.post(self.api_url() + '/point/', json=metadata)
         if resp.status_code!=201:
             return {'success': False, 
