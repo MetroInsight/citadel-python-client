@@ -34,7 +34,7 @@ class Citadel():
         if tag_query:
             if not isinstance(tag_query,str):
                 tag_query = json.dumps(tag_query)
-            params['query'] = tag_query
+            params['tag_query'] = tag_query
         if geo_query:
             if not isinstance(geo_query,str):
                 geo_query = json.dumps(geo_query)
