@@ -29,7 +29,11 @@ class Citadel():
             return resp['uuid']
 
     def query_points(self, query):
-        #TODO
+        query = {'query': query}
+        resp = requests.post(query_url, json=query, headers=headers)
+        pdb.set_trace()
+        points = resp.json()['results']
+        return points
 
 
     def delete_point(self, uuid):
