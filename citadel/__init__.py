@@ -43,7 +43,7 @@ class Citadel():
         #TODO
         pass
 
-    def post_data(data, headers=None):
+    def post_data(self, data, headers=None):
         if not headers:
             headers = self.headers
         data_url = self.api_url + '/data'
