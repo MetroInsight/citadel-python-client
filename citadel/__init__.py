@@ -13,10 +13,12 @@ class Citadel():
             'content-type': 'application/json',
         }
 
-    def create_point(self, metadata):
-        resp = requests.post(self.api_url() + '/point/', 
+    def create_point(self, metadata, headers=None):
+        if not headers:
+            headers = self.headers
+        resp = requests.post(self.api_url + '/point/', 
                              json=metadata, 
-                             headers=headers)
+                             headers=self.headers)
         if resp.statuc_code in [400, 500]:
             #TODO: define better behavior
             return False
@@ -28,23 +30,30 @@ class Citadel():
         else:
             return resp['uuid']
 
-    def query_points(self, query):
+    def query_points(self, query, headers=None):
+        if not headers:
+            headers = self.headers
         query = {'query': query}
+        query_url = self.api_url + '/query'
         resp = requests.post(query_url, json=query, headers=headers)
-        pdb.set_trace()
         points = resp.json()['results']
         return points
 
-
     def delete_point(self, uuid):
         #TODO
+        pass
 
-    def post_data(data, headers=headers):
+    def post_data(data, headers=None):
+        if not headers:
+            headers = self.headers
+        data_url = self.api_url + '/data'
         resp = requests.post(data_url, json={'data': data}, headers=headers)
         return resp.json()['success']
 
     def get_timeseries(self, uuid, start_time=None, end_time=None):
         # TODO
+        pass
 
     def delete_timeseries(self, uuid, start_time, end_time):
         # TODO
+        pass
