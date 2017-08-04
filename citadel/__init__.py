@@ -16,9 +16,10 @@ class Citadel():
     def create_point(self, metadata, headers=None):
         if not headers:
             headers = self.headers
-        resp = requests.post(self.api_url + '/point/', 
+        resp = requests.post(self.api_url + '/point', 
                              json=metadata, 
                              headers=self.headers)
+        pdb.set_trace()
         if resp.status_code in [400, 500]:
             #TODO: define better behavior
             return False
