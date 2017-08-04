@@ -22,13 +22,13 @@ class Citadel():
         if resp.status_code in [400, 500]:
             #TODO: define better behavior
             return False
-        resp = resp.json()
+        resp_json = resp.json()
         if resp.status_code!=201:
             return {'success': False, 
-                    'reason': resp['reason']
+                    'reason': resp_json['reason']
                    }
         else:
-            return resp['uuid']
+            return resp_json['uuid']
 
     def query_points(self, query, headers=None):
         if not headers:
@@ -48,7 +48,10 @@ class Citadel():
             headers = self.headers
         data_url = self.api_url + '/data'
         resp = requests.post(data_url, json={'data': data}, headers=headers)
-        return resp.json()['success']
+        if resp.status_code in [200, 201]:
+            return resp.json()['success']
+        else:
+            return False
 
     def get_timeseries(self, uuid, start_time=None, end_time=None):
         # TODO
