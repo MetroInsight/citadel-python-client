@@ -19,7 +19,7 @@ class Citadel():
         resp = requests.post(self.api_url + '/point/', 
                              json=metadata, 
                              headers=self.headers)
-        if resp.statuc_code in [400, 500]:
+        if resp.status_code in [400, 500]:
             #TODO: define better behavior
             return False
         resp = resp.json()
