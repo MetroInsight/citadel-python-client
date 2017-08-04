@@ -19,7 +19,6 @@ class Citadel():
         resp = requests.post(self.api_url + '/point', 
                              json=metadata, 
                              headers=self.headers)
-        pdb.set_trace()
         if resp.status_code in [400, 500]:
             #TODO: define better behavior
             return False
