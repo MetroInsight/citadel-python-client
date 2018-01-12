@@ -8,30 +8,33 @@ from .errors import CitadelError
 
 class Citadel():
 
-    def __init__(self, base_url, apikey):
+    def __init__(self, base_url, apikey, verify=True):
         self.base_url = base_url
         self.api_url = '{0}/api'.format(self.base_url)
         self.headers = {
             'content-type': 'application/json',
         }
         self.apikey = apikey
+        self.verify = verify
 
     def get_point(self, uuid, headers=None):
         if not headers:
             headers = self.headers
         resp = requests.get(self.api_url + '/point/{0}'.format(uuid),
-                            headers=headers)
+                            headers=headers, verify=self.verify)
         if resp.status_code in [400, 500]:
             raise CitadelError(resp)
         return resp.json()['results']
 
-    def create_point(self, metadata, headers=None):
+    def create_points(self, metadata_list, headers=None):
         if not headers:
             headers = self.headers
-        metadata['userToken'] = self.apikey
+        body = {}
+        body['points'] = metadata_list
+        body['userToken'] = self.apikey
         resp = requests.post(self.api_url + '/point', 
-                             json=metadata, 
-                             headers=self.headers)
+                             json=body, 
+                             headers=self.headers, verify=verify)
         if resp.status_code in [400, 500]:
             raise CitadelError(resp)
         resp_json = resp.json()
@@ -47,7 +50,8 @@ class Citadel():
             headers = self.headers
         query = {'query': query}
         query_url = self.api_url + '/query'
-        resp = requests.post(query_url, json=query, headers=headers)
+        resp = requests.post(query_url, json=query, 
+                             headers=headers, verify=self.verify)
         if resp.status_code in [400, 500]:
             raise CitadelError(resp)
         points = resp.json()['results']
@@ -57,7 +61,12 @@ class Citadel():
         if not headers:
             headers = self.headers
         data_url = self.api_url + '/data'
-        resp = requests.post(data_url, json={'data': data}, headers=headers)
+        body = {
+            'data': data,
+            'userToken': self.apikey
+        }
+        resp = requests.post(data_url, json=body, headers=headers,
+                             verify=self.verify)
         if resp.status_code in [400, 500]:
             raise CitadelError(resp)
         elif resp.status_code in [200, 201]:
