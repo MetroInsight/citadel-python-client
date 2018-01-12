@@ -8,12 +8,13 @@ from .errors import CitadelError
 
 class Citadel():
 
-    def __init__(self, base_url):
+    def __init__(self, base_url, apikey):
         self.base_url = base_url
         self.api_url = '{0}/api'.format(self.base_url)
         self.headers = {
             'content-type': 'application/json',
         }
+        self.apikey = apikey
 
     def get_point(self, uuid, headers=None):
         if not headers:
@@ -27,6 +28,7 @@ class Citadel():
     def create_point(self, metadata, headers=None):
         if not headers:
             headers = self.headers
+        metadata['userToken'] = self.apikey
         resp = requests.post(self.api_url + '/point', 
                              json=metadata, 
                              headers=self.headers)
@@ -63,7 +65,7 @@ class Citadel():
         else:
             return False
 
-    def query_data(self, uuid, start_time=None, end_time=None,
+    def get_data(self, uuid, start_time=None, end_time=None,
                        headers=None):
         if not headers:
             headers = self.headers
