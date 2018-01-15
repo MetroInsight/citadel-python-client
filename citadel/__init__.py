@@ -34,9 +34,10 @@ class Citadel():
         body['userToken'] = self.apikey
         resp = requests.post(self.api_url + '/point', 
                              json=body, 
-                             headers=self.headers, verify=verify)
+                             headers=self.headers, verify=self.verify)
         if resp.status_code in [400, 500]:
-            raise CitadelError(resp)
+            err = CitadelError(resp)
+            raise err
         resp_json = resp.json()
         if resp.status_code!=201:
             return {'success': False, 
@@ -78,14 +79,18 @@ class Citadel():
                        headers=None):
         if not headers:
             headers = self.headers
-        query = {'query': {}}
+        query = {
+                    'query': {},
+                    'userToken': self.apikey
+                }
         if start_time:
             query['query']['timestamp_min'] = start_time
         if end_time:
             query['query']['timestamp_max'] = end_time
         resp = requests.post(self.api_url + '/querydata',
                              json=query, 
-                             headers=self.headers)
+                             headers=self.headers,
+                             verify=self.verify)
         if resp.status_code in [400, 500]:
             raise CitadelError(resp)
         return resp.json()['results']

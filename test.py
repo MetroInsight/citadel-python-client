@@ -1,6 +1,7 @@
 from citadel import Citadel
 import json
 import arrow
+import traceback
 
 import pdb
 
@@ -17,12 +18,14 @@ point = {
     'pointType': 'air_quality'
 }
 
-"""
-res = citadel.create_points([point])
-print(res)
-uuid = "b197bbf9-31a5-4372-84d1-25e1704d81e0"
-"""
-
+try:
+    res = citadel.create_points([point])
+    print(res)
+except Exception as e:
+    if e.reason == 'Existing name':
+        pass
+    else:
+        traceback.print_exc()
 
 # Query Test
 res = citadel.query_points({
@@ -54,13 +57,9 @@ data = [
 resp = citadel.post_data(data)
 assert resp
 
-pdb.set_trace()
-"""
 
 # Get Data from a UUID
 #uuid = "744071ce-dc56-4798-9d25-397ce2df9baf"
 data = citadel.get_data(uuid, None, None)
+pdb.set_trace()
 
-
-# Data Query
-"""
