@@ -31,6 +31,7 @@ class Citadel():
             headers = self.headers
         body = {}
         body['points'] = metadata_list
+        #body = metadata_list[0]
         body['userToken'] = self.apikey
         resp = requests.post(self.api_url + '/point', 
                              json=body, 
@@ -87,6 +88,7 @@ class Citadel():
             query['query']['timestamp_min'] = start_time
         if end_time:
             query['query']['timestamp_max'] = end_time
+        query['query']['uuids'] = [uuid]
         resp = requests.post(self.api_url + '/querydata',
                              json=query, 
                              headers=self.headers,
