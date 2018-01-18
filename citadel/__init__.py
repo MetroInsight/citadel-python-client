@@ -26,12 +26,11 @@ class Citadel():
             raise CitadelError(resp)
         return resp.json()['results']
 
-    def create_points(self, metadata_list, headers=None):
+    def create_point(self, metadata, headers=None):
         if not headers:
             headers = self.headers
         body = {}
-        body['points'] = metadata_list
-        #body = metadata_list[0]
+        body['point'] = metadata
         body['userToken'] = self.apikey
         resp = requests.post(self.api_url + '/point', 
                              json=body, 
@@ -98,9 +97,42 @@ class Citadel():
         return resp.json()['results']
 
 
-    def query_bbox(self, begin_time, end_time, min_lng,
-                   min_lat, max_lng, max_lat):
-        pass
+    def query_bbox(self, begin_time=None, end_time=None, min_lng=None,
+                   min_lat=None, max_lng=None, max_lat=None, uuids=[]):
+        """
+        begin_time timestamp (ms) in long (in python just int)
+        end_time timestamp (ms) in long
+        min_lng float
+        min_lat float
+        max_lng float
+        max_lat float
+        uuids [str]
+        """
+        query = {}
+        if begin_time:
+            query['begin_time'] = begin_time
+        if end_time:
+            query['end_tmie'] = end_time
+        if min_lng:
+            query['min_lng'] = min_lng
+        if min_lat:
+            query['min_lat'] = min_lat
+        if max_lng:
+            query['max_lng'] = min_lng
+        if max_lat:
+            query['max_lat'] = min_lat
+        if uuids:
+            query['uuids'] = uuids
+        body = {
+            'query': query,
+            'userToken': self.apikey
+        }
+        resp = requests.post(self.api_url + '/querydata', 
+                             json=body, 
+                             headers=self.headers, verify=self.verify)
+        if resp.status_code != 200:
+            raise CitadelError(resp)
+        return resp.json()['results']
 
     def delete_timeseries(self, uuid, start_time, end_time):
         # TODO

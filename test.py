@@ -3,46 +3,52 @@ import json
 import arrow
 import traceback
 import sys
-
 import pdb
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 with open('config/citadel_config.json', 'r') as fp:
     config = json.load(fp)
 apikey = config['apikey']
 
-citadel = Citadel(config['hostname'], apikey, True)
+citadel = Citadel(config['hostname'], apikey, False)
 
 # Create Test
 point = {
-    'name': 'test_sensor6',
+    'name': 'test_sensor7',
     'unit': 'ppm',
     'pointType': 'air_quality'
 }
 
 try:
-    res = citadel.create_points([point])
-    print(res)
+    res = citadel.create_point(point)
+    if res:
+        print('Success: Point Creation')
+    else:
+        print('Failed: Point creation due to {0}')
 except Exception as e:
-    #pdb.set_trace()
     if e.reason == 'Existing name':
         pass
     else:
         traceback.print_exc()
         sys.exit()
-#pdb.set_trace()
 
 # Query Test
 res = citadel.query_points({
     'name': point['name']
 })
-print(res)
 uuid = res[0]
-#pdb.set_trace()
+if uuid:
+    print('Success: Point query')
+else:
+    print('Failed: Point query due to {0}')
 
 # Get Point Test
 res = citadel.get_point(uuid)
-print(res)
-#pdb.set_trace()
+if uuid:
+    print('Success: Get point')
+else:
+    print('Failed: Get point')
 
 # decide policy
 # TODO
@@ -58,16 +64,31 @@ data = [
         'timestamp': t
     }
 ]
-resp = citadel.post_data(data)
-assert resp
-#pdb.set_trace()
+res = citadel.post_data(data)
+assert res
+if res:
+    print('Success: post data')
+else:
+    print('Failed: post data')
 
 
 # Get Data from a UUID
-#uuid = "744071ce-dc56-4798-9d25-397ce2df9baf"
 data = citadel.get_data(uuid, None, None)
-#pdb.set_trace()
 if data:
-    print("Success")
+    print("Success: retrieve data only with a UUID")
 else:
     print('Failed: empty result')
+
+begin_time = t - 1000000
+end_time = t + 1000000
+min_lng = -120
+min_lat = 30
+max_lng = -110
+max_lat = 35
+uuids = []
+res = citadel.query_bbox(begin_time, end_time, min_lng, 
+                         min_lat, max_lng, max_lat, uuids)
+if res:
+    print("Success: retrieve data with BBOX query")
+else:
+    print('Failed')
