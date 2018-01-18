@@ -134,6 +134,22 @@ class Citadel():
             raise CitadelError(resp)
         return resp.json()['results']
 
+    def register_policy(self, sensors, users):
+        body = {}
+        body['userToken'] = self.apikey
+        policy = {
+            'sensors': sensors,
+            'users': users
+        }
+        body['policy'] = policy
+        resp = requests.post(self.api_url + '/registerPolicy',
+                             json=body, 
+                             headers=self.headers,
+                             verify=self.verify)
+        if resp.status_code != 200:
+            raise CitadelError(resp)
+        return resp.json()['success']
+
     def delete_timeseries(self, uuid, start_time, end_time):
         # TODO
         pass

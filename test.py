@@ -13,13 +13,13 @@ apikey = config['apikey']
 
 citadel = Citadel(config['hostname'], apikey, False)
 
-# Create Test
 point = {
     'name': 'test_sensor7',
     'unit': 'ppm',
     'pointType': 'air_quality'
 }
 
+# Create Test
 try:
     res = citadel.create_point(point)
     if res:
@@ -51,7 +51,14 @@ else:
     print('Failed: Get point')
 
 # decide policy
-# TODO
+"""
+citadel.register_policy([uuid], ['bk7749@gmail.com'])
+
+if res:
+    print("Success: register a policy")
+else:
+    print('Failed: register a policy')
+"""
 
 # Post Data Test
 t = 1510791536000
@@ -70,7 +77,6 @@ if res:
     print('Success: post data')
 else:
     print('Failed: post data')
-
 
 # Get Data from a UUID
 data = citadel.get_data(uuid, None, None)
