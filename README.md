@@ -5,7 +5,7 @@ The code base might be significantly changed in the future with Swagger's client
 
 ## Installation
 1. Clone this repository.
-2. python setup.py install
+2. ``python setup.py install``
 
 ## How to use?
 - Refer [actual usage](https://github.com/MetroInsight/citadel-python-client/blob/master/test.py)
