@@ -1,0 +1,17 @@
+{
+    "hostname": "https://xxx.com",
+    "apikey": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "secondary_apikey": "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
+    "point": {
+        "name": "test_sensor7",
+        "unit": "ppm",
+        "pointType": "air_quality"
+        },
+    "datapoint": {
+        "geometryType": "point",
+        "coordinates": [[-117.0, 33.0]],
+        "uuid": "test_uuid_FILLED_BY_TEST_CODE",
+        "value": 90,
+        "timestamp": 1510791536000
+    }
+}
