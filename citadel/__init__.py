@@ -24,7 +24,7 @@ class Citadel():
                             headers=headers, verify=self.verify)
         if resp.status_code in [400, 500]:
             raise CitadelError(resp)
-        return resp.json()['results']
+        return resp.json()['results'][0]
     
     def upsert_metadata(self, uuid, metadata, headers=None):
         if not headers:
