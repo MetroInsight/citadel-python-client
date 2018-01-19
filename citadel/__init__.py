@@ -25,6 +25,26 @@ class Citadel():
         if resp.status_code in [400, 500]:
             raise CitadelError(resp)
         return resp.json()['results']
+    
+    def upsert_metadata(self, uuid, metadata, headers=None):
+        if not headers:
+            headers = self.headers
+        body = {}
+        body['metadata'] = metadata
+        body['userToken'] = self.apikey
+        resp = requests.post(self.api_url + '/point/' + uuid, 
+                             json=body, 
+                             headers=self.headers, verify=self.verify)
+        if resp.status_code in [400, 500]:
+            err = CitadelError(resp)
+            raise err
+        resp_json = resp.json()
+        if resp.status_code!=200:
+            return {'success': False, 
+                    'reason': resp_json['reason']
+                   }
+        else:
+            return True
 
     def create_point(self, metadata, headers=None):
         if not headers:
@@ -68,6 +88,7 @@ class Citadel():
         }
         resp = requests.post(data_url, json=body, headers=headers,
                              verify=self.verify)
+        pdb.set_trace()
         if resp.status_code in [400, 500]:
             raise CitadelError(resp)
         elif resp.status_code in [200, 201]:
