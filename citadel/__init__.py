@@ -88,7 +88,6 @@ class Citadel():
         }
         resp = requests.post(data_url, json=body, headers=headers,
                              verify=self.verify)
-        pdb.set_trace()
         if resp.status_code in [400, 500]:
             raise CitadelError(resp)
         elif resp.status_code in [200, 201]:
