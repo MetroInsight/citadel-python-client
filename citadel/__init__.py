@@ -134,13 +134,13 @@ class Citadel():
         if end_time:
             query['end_tmie'] = end_time
         if min_lng:
-            query['min_lng'] = min_lng
+            query['lng_min'] = min_lng
         if min_lat:
-            query['min_lat'] = min_lat
+            query['lat_min'] = min_lat
         if max_lng:
-            query['max_lng'] = min_lng
+            query['lng_max'] = max_lng
         if max_lat:
-            query['max_lat'] = min_lat
+            query['lat_max'] = max_lat
         if uuids:
             query['uuids'] = uuids
         body = {
