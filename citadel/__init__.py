@@ -130,17 +130,17 @@ class Citadel():
         """
         query = {}
         if begin_time:
-            query['begin_time'] = begin_time
+            query['timestamp_min'] = begin_time
         if end_time:
-            query['end_tmie'] = end_time
+            query['timestamp_max'] = end_time
         if min_lng:
-            query['lng_min'] = min_lng
+            query['min_lng'] = min_lng
         if min_lat:
-            query['lat_min'] = min_lat
+            query['min_lat'] = min_lat
         if max_lng:
-            query['lng_max'] = max_lng
+            query['max_lng'] = max_lng
         if max_lat:
-            query['lat_max'] = max_lat
+            query['max_lat'] = max_lat
         if uuids:
             query['uuids'] = uuids
         body = {
